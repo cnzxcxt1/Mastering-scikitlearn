@@ -100,6 +100,8 @@ import numpy as np
 print(np.var([6, 8, 10, 14, 18], ddof=1))
 
 
+
+
 ################# Sample 6 #################
 
 xbar = (6 + 8 + 10 + 14 + 18) / 5
@@ -122,6 +124,9 @@ y_test = [[11], [8.5], [15], [18], [11]]
 model = LinearRegression()
 model.fit(X, y)
 print('R-squared: %.4f' % model.score(X_test, y_test))
+
+
+
 
 
 ################# Sample 8: Multiple linear regression #################
@@ -199,6 +204,8 @@ print('Simple linear regression r-squared', regressor.score(X_test, y_test))
 print('Quadratic regression r-squared', regressor_quadratic.score(X_test_quadratic, y_test))
 
 ###   Regularization   ###
+
+
 ################# Sample 12: Applying linear regression #################
 
 import pandas as pd
@@ -223,7 +230,7 @@ import pandas as pd
 import matplotlib.pylab as plt
 from sklearn.cross_validation import train_test_split
 
-df = pd.read_csv('D://Dropbox//writting//scikit-learn//Mastering Machine Learning with scikit-learn//Chapter2//winequality-red.csv', sep=';')
+df = pd.read_csv('winequality-red.csv', sep=';')
 X = df[list(df.columns)[:-1]]
 y = df['quality']
 X_train, X_test, y_train, y_test = train_test_split(X, y)
@@ -239,12 +246,12 @@ print('R-squared:', regressor.score(X_test, y_test))
 import pandas as pd
 from sklearn. cross_validation import cross_val_score
 from sklearn.linear_model import LinearRegression
-df = pd.read_csv('D://Dropbox//writting//scikit-learn//Mastering Machine Learning with scikit-learn//Chapter2//winequality-red.csv', sep=';')
+df = pd.read_csv('winequality-red.csv', sep=';')
 X = df[list(df.columns)[:-1]]
 y = df['quality']
 regressor = LinearRegression()
 scores = cross_val_score(regressor, X, y, cv=5)
-print scores.mean(), scores
+print(scores.mean(), scores)
 
 
 ################# Sample 16 #################
@@ -266,10 +273,10 @@ X_test = X_scaler.transform(X_test)
 y_test = y_scaler.transform(y_test)
 regressor = SGDRegressor(loss='squared_loss')
 scores = cross_val_score(regressor, X_train, y_train, cv=5)
-print 'Cross validation r-sqaured scores:', scores
-print 'Average cross validation r-squared score:', np.mean(scores)
+print('Cross validation r-sqaured scores:', scores)
+print('Average cross validation r-squared score:', np.mean(scores))
 regressor.fit_transform(X_train, y_train)
-print 'Test set r-squared score', regressor.score(X_test, y_test)
+print('Test set r-squared score', regressor.score(X_test, y_test))
 
 
 ################# Updated poly 1 #################
