@@ -9,7 +9,6 @@ print('Number of spam messages:', df[df[0] == 'spam'][0].count())
 print('Number of ham messages:', df[df[0] == 'ham'][0].count())
 
 ################# Sample 2 #################
-import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model.logistic import LogisticRegression
@@ -17,10 +16,11 @@ from sklearn.cross_validation import train_test_split
 
 df = pd.read_csv('SMSSpamCollection', delimiter='\t', header=None)
 X_train_raw, X_test_raw, y_train, y_test = train_test_split(df[1], df[0])
-#X_train_raw, X_test_raw, y_train, y_test = train_test_split(df['message'], df['label'])
+
 vectorizer = TfidfVectorizer()
 X_train = vectorizer.fit_transform(X_train_raw)
 X_test = vectorizer.transform(X_test_raw)
+
 classifier = LogisticRegression()
 classifier.fit(X_train, y_train)
 predictions = classifier.predict(X_test)
@@ -46,8 +46,7 @@ plt.ylabel('True label')
 plt.xlabel('Predicted label')
 plt.show()
 
-### Accuracy
-################# Sample 4 #################
+### Accuracy #################
 
 from sklearn.metrics import accuracy_score
 y_pred, y_true = [0, 1, 1, 0], [1, 1, 1, 1]
@@ -55,25 +54,7 @@ print(accuracy_score(y_true, y_pred))
 
 
 ################# Sample: Evaluating the SMS Classifier #################
-
-import numpy as np
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model.logistic import LogisticRegression
-from sklearn.cross_validation import train_test_split, cross_val_score
-
-df = pd.read_csv('sms.csv')
-X_train_raw, X_test_raw, y_train, y_test = train_test_split(df['message'], df['label'])
-vectorizer = TfidfVectorizer()
-X_train = vectorizer.fit_transform(X_train_raw)
-X_test = vectorizer.transform(X_test_raw)
-classifier = LogisticRegression()
-classifier.fit(X_train, y_train)
-scores = cross_val_score(classifier, X_train, y_train, cv=5)
-print(np.mean(scores), scores)
-
-### Precision and recall
-################# Sample 6 #################
+### Precision and recall ###
 
 import numpy as np
 import pandas as pd
@@ -93,15 +74,14 @@ print('Precision', np.mean(precisions), precisions)
 recalls = cross_val_score(classifier, X_train, y_train, cv=5, scoring='recall')
 print('Recall', np.mean(recalls), recalls)
 
-################# Sample: F1 Score #################
+################# F1 Score #################
 
 f1s = cross_val_score(classifier, X_train, y_train, cv=5, scoring='f1')
 print('F1', np.mean(f1s), f1s)
 
 
-################# Sample: ROC AUC #################
+################# ROC AUC #################
 
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -129,40 +109,7 @@ plt.ylabel('Recall')
 plt.xlabel('Fall-out')
 plt.show()
 
-
-################# Sample 8 #################
-
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.linear_model.logistic import LogisticRegression
-from sklearn.metrics import roc_curve, auc
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.cross_validation import train_test_split
-
-df = pd.read_csv('sms.csv')
-X_train_raw, X_test_raw, y_train, y_test = train_test_split(df['message'], df['label'])
-vectorizer = TfidfVectorizer()
-X_train = vectorizer.fit_transform(X_train_raw)
-X_test = vectorizer.transform(X_test_raw)
-classifier = LogisticRegression().fit(X_train, y_train)
-clf = LogisticRegression()
-clf.fit(X_train, y_train)
-predictions = clf.predict_proba(X_test)
-false_positive_rate, recall, threhsolds = roc_curve(y_test, predictions[:, 1])
-roc_auc = auc(false_positive_rate, recall)
-plt.title('Receiver Operating Characteristic')
-plt.plot(false_positive_rate, recall, 'b', label='AUC = %0.2f' % roc_auc)
-plt.legend(loc='lower right')
-plt.plot([0, 1], [0, 1], 'r--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.0])
-plt.ylabel('Recall')
-plt.xlabel('Fall-out')
-plt.show()
-
-
-################# Sample 9 #################
+################# Tuning models with grid search #################
 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
