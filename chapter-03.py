@@ -1,4 +1,5 @@
 ### chapter 03: Feature Extraction and Preprocessing
+
 ### Extracting features from categorical variables
 import numpy as np
 from sklearn.feature_extraction import DictVectorizer
@@ -52,52 +53,7 @@ print('Distance between 1st and 2nd documents:', euclidean_distances(counts[0], 
 print('Distance between 1st and 3rd documents:', euclidean_distances(counts[0], counts[2]))
 print('Distance between 2nd and 3rd documents:', euclidean_distances(counts[1], counts[2]))
 
-################# Sample 1 #################
-from sklearn.feature_extraction import DictVectorizer
-onehot_encoder = DictVectorizer()
-instances = [
-    {'city': 'New York'},
-    {'city': 'San Francisco'},
-    {'city': 'Chapel Hill'}
-]
-print(onehot_encoder.fit_transform(instances).toarray())
-
-
-################# Sample 2 #################
-
-corpus = [
-    'UNC played Duke in basketball',
-    'Duke lost the basketball game'
-]
-
-################# Sample 3 #################
-
-from sklearn.feature_extraction.text import CountVectorizer
-corpus = [
-    'UNC played Duke in basketball',
-    'Duke lost the basketball game'
-]
-vectorizer = CountVectorizer(binary=True)
-print(vectorizer.fit_transform(corpus).todense())
-print(vectorizer.vocabulary_)
-
-
-################# Sample 4 #################
-
-from sklearn.feature_extraction.text import CountVectorizer
-corpus = [
-    'UNC played Duke in basketball',
-    'Duke lost the basketball game',
-    'I ate a sandwich'
-]
-vectorizer = CountVectorizer(binary=True)
-X = vectorizer.fit_transform(corpus).todense()
-print(X)
-print(vectorizer.vocabulary_)
-for i, document in enumerate(corpus):
-    print(document, '=', X[i])
-
-
+## P55
 ################# Sample 6: Stop-word filtering #################
 
 from sklearn.feature_extraction.text import CountVectorizer
@@ -110,20 +66,6 @@ vectorizer = CountVectorizer(binary=True, stop_words='english')
 print(vectorizer.fit_transform(corpus).todense())
 print(vectorizer.vocabulary_)
 
-
-################# Sample 7 #################
-
-
-from sklearn.metrics.pairwise import euclidean_distances
-counts = [
-    [0, 1, 1, 0, 0, 1, 0, 1],
-    [0, 1, 1, 1, 1, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 1, 0]
-]
-counts = np.matrix(counts)
-print('Distance between 1st and 2nd documents:', euclidean_distances(counts[0], counts[1]))
-print('Distance between 1st and 3rd documents:', euclidean_distances(counts[0], counts[2]))
-print('Distance between 2nd and 3rd documents:', euclidean_distances(counts[1], counts[2]))
 
 ################# Sample 8: Stemming and lemmatization #################
 
@@ -142,8 +84,8 @@ corpus = [
     'There were many wizards at the gathering.'
 ]
 
-#import nltk
-#nltk.download('wordnet')
+import nltk
+nltk.download('wordnet')
 ################# Sample 8 #################
 # need to install NLTK package
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -151,8 +93,6 @@ lemmatizer = WordNetLemmatizer()
 print(lemmatizer.lemmatize('gathering', 'v'))
 print(lemmatizer.lemmatize('gathering', 'n'))
 
-
-################# Sample 8 #################
 
 from nltk.stem import PorterStemmer
 stemmer = PorterStemmer()
@@ -186,7 +126,7 @@ tagged_corpus = [pos_tag(word_tokenize(document)) for document in corpus]
 print('Lemmatized:', [[lemmatize(token, tag) for token, tag in document] for document in tagged_corpus])
 
 
-################# Sample 10: Extending bag-of-words with TF-IDF weights #################
+### Extending bag-of-words with TF-IDF weights ###
 
 from sklearn.feature_extraction.text import CountVectorizer
 corpus = ['The dog ate a sandwich, the wizard transfigured a sandwich, and I ate a sandwich']
@@ -194,48 +134,20 @@ vectorizer = CountVectorizer(stop_words='english')
 print(vectorizer.fit_transform(corpus).todense())
 print(vectorizer.vocabulary_)
 
-
-################# Sample 10 #################
-
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 corpus = [
     'The dog foo bar dog dog dog dog foo bar',
     'Dog the hat'
 ]
 
-vectorizer_01 = CountVectorizer(stop_words='english')
-vectorizer_02 = TfidfVectorizer(stop_words='english')
+#vectorizer_01 = CountVectorizer(stop_words='english')
+vectorizer_01 = TfidfVectorizer(stop_words='english')
 
 print(vectorizer_01.fit_transform(corpus).todense())
 
 
-################# Sample 11 #################
 
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-corpus = [
-    'The dog ate a sandwich and I ate a sandwich',
-    'The wizard transfigured a sandwich'
-]
-vectorizer = CountVectorizer(stop_words='english')
-transformer = TfidfTransformer(use_idf=False)
-X = vectorizer.fit_transform(corpus)
-print('Count vectors:\n', X.todense())
-print('Vocabulary:\n', vectorizer.vocabulary_)
-print('TF vectors:\n', transformer.fit_transform(X).todense())
-
-
-################# Sample 12 #################
-
-from sklearn.feature_extraction.text import TfidfVectorizer
-corpus = [
-    'The dog ate a sandwich and I ate a sandwich',
-    'The wizard transfigured a sandwich'
-]
-vectorizer = TfidfVectorizer(stop_words='english')
-print(vectorizer.fit_transform(corpus))
-
-
-################# Sample 13: Space-efficient feature vectorizing with the hashing trick #################
+### Space-efficient feature vectorizing with the hashing trick In this chapter's
 
 from sklearn.feature_extraction.text import HashingVectorizer
 corpus = ['the', 'ate', 'bacon', 'cat']
@@ -295,6 +207,7 @@ show_corners(corners, mandrill)
 
 ################# Sample 16: SIFT and SURF #################
 ### this code has some problem
+### just because the package mahotas cannot be installed
 import mahotas as mh
 from mahotas.features import surf
 
@@ -303,7 +216,7 @@ print('The first SURF descriptor:\n', surf.surf(image)[0])
 print('Extracted %s SURF descriptors' % len(surf.surf(image)))
 
 
-################# Sample 17 #################
+################# Data standardization #################
 
 from sklearn import preprocessing
 import numpy as np
