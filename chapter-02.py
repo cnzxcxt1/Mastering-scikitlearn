@@ -18,6 +18,9 @@ plt.grid(True)
 plt.show()
 
 
+
+plt.close()
+
 ################# Sample 2 #################
 
 from sklearn.linear_model import LinearRegression
@@ -51,6 +54,8 @@ plt.plot(X2, y2, 'g-')
 plt.show()
 
 
+plt.close()
+
 ################# Figure 2: P.25 #################
 from sklearn.linear_model.base import LinearRegression
 import matplotlib.pyplot as plt
@@ -77,6 +82,7 @@ plt.plot(X2, y4, 'y-')
 plt.plot(X2, y5, 'o-')
 plt.show()
 
+plt.close()
 ###   Evaluating the fitness of a model with a cost function   ###
 
 X = [[6], [8], [10], [14],   [18]]
@@ -196,6 +202,8 @@ plt.grid(True)
 plt.scatter(X_train, y_train)
 plt.show()
 
+plt.close()
+
 print(X_train)
 print(X_train_quadratic)
 print(X_test)
@@ -222,13 +230,15 @@ plt.ylabel('Quality')
 plt.title('Alcohol Against Quality')
 plt.show()
 
+plt.close()
+
 
 ################# Sample 14 #################
 
 from sklearn.linear_model import LinearRegression
 import pandas as pd
 import matplotlib.pylab as plt
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 df = pd.read_csv('winequality-red.csv', sep=';')
 X = df[list(df.columns)[:-1]]
@@ -244,7 +254,7 @@ print('R-squared:', regressor.score(X_test, y_test))
 ################# Sample 15 #################
 
 import pandas as pd
-from sklearn. cross_validation import cross_val_score
+from sklearn. model_selection import cross_val_score
 from sklearn.linear_model import LinearRegression
 df = pd.read_csv('winequality-red.csv', sep=';')
 X = df[list(df.columns)[:-1]]
@@ -266,16 +276,16 @@ data = load_boston()
 X_train, X_test, y_train, y_test = train_test_split(data.data, data.target)
 
 X_scaler = StandardScaler()
-y_scaler = StandardScaler()
+#y_scaler = StandardScaler()
 X_train = X_scaler.fit_transform(X_train)
-y_train = y_scaler.fit_transform(y_train)
+#y_train = y_scaler.fit_transform([y_train])
 X_test = X_scaler.transform(X_test)
-y_test = y_scaler.transform(y_test)
-regressor = SGDRegressor(loss='squared_loss')
+#y_test = y_scaler.transform([y_test])
+regressor = SGDRegressor(loss='squared_loss', max_iter=2000, tol=1e-3)
 scores = cross_val_score(regressor, X_train, y_train, cv=5)
 print('Cross validation r-sqaured scores:', scores)
 print('Average cross validation r-squared score:', np.mean(scores))
-regressor.fit_transform(X_train, y_train)
+regressor.fit(X_train, y_train)
 print('Test set r-squared score', regressor.score(X_test, y_test))
 
 
@@ -314,9 +324,9 @@ plt.grid(True)
 plt.scatter(X_train, y_train)
 plt.show()
 
-print X_train
-print X_train_quadratic
-print X_test
-print X_test_quadratic
-print 'Simple linear regression r-squared', regressor.score(X_test, y_test)
-print 'Quadratic regression r-squared', regressor_quadratic.score(X_test_quadratic, y_test)
+print(X_train)
+print(X_train_quadratic)
+print(X_test)
+print(X_test_quadratic)
+print('Simple linear regression r-squared', regressor.score(X_test, y_test))
+print('Quadratic regression r-squared', regressor_quadratic.score(X_test_quadratic, y_test))
