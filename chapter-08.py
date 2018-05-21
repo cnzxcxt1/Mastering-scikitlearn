@@ -14,7 +14,7 @@ newsgroups_test = fetch_20newsgroups(subset='test', categories=categories, remov
 vectorizer = TfidfVectorizer()
 X_train = vectorizer.fit_transform(newsgroups_train.data)
 X_test = vectorizer.transform(newsgroups_test.data)
-classifier = Perceptron(n_iter=100, eta0=0.1)
+classifier = Perceptron( max_iter=1000, tol = 1e-3, eta0=0.1)
 classifier.fit(X_train, newsgroups_train.target )
 predictions = classifier.predict(X_test)
 print(classification_report(newsgroups_test.target, predictions))

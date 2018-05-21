@@ -51,7 +51,7 @@ plt.show()
 ################# Sample 1 #################
 
 import numpy as np
-print np.linalg.eig(np.array([[3, 2], [1, 2]]))[0]
+print(np.linalg.eig(np.array([[3, 2], [1, 2]]))[0])
 
 W, V = np.linalg.eig(np.array([[3, 2], [1, 2]]))
 

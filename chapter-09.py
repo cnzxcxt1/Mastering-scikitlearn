@@ -37,7 +37,7 @@ if __name__ == '__main__':
         'clf__gamma': (0.01, 0.03, 0.1, 0.3, 1),
         'clf__C': (0.1, 0.3, 1, 3, 10, 30),
     }
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=2, verbose=1, scoring='accuracy')
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=6, verbose=1, scoring='accuracy')
     grid_search.fit(X_train[:10000], y_train[:10000])
     print('Best score: %0.3f' % grid_search.best_score_)
     print('Best parameters set:')
