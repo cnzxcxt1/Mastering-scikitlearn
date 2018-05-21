@@ -15,6 +15,8 @@ X = np.hstack((cluster1, cluster2)).T
 plt.scatter(X[:, 0], X[:, 1])
 plt.show()
 
+plt.close()
+
 K = range(1, 10)
 # [1, 2, 3, 4, 5, 6, 7, 8, 9] 其实只有9个类别
 meandistortions = []
@@ -104,13 +106,13 @@ from sklearn.cluster import KMeans
 from sklearn.utils import shuffle
 import mahotas as mh
 
-original_img = np.array(mh.imread('headshot.jpg'), dtype=np.float64) / 255
+original_img = np.array(mh.imread('tree.jpg'), dtype=np.float64) / 255
 original_dimensions = tuple(original_img.shape)
 width, height, depth = tuple(original_img.shape)
 
 image_flattened = np.reshape(original_img, (width * height, depth))
 image_array_sample = shuffle(image_flattened, random_state=0)[:1000]
-estimator = KMeans(n_clusters=16, random_state=0)
+estimator = KMeans(n_clusters=20, random_state=0)
 estimator.fit(image_array_sample)
 
 #estimator.fit(image_flattened)
@@ -134,6 +136,8 @@ plt.imshow(compressed_img)
 plt.axis('off')
 plt.show()
 
+plt.close()
+
 ### Clustering to learn features
 
 import numpy as np
@@ -143,19 +147,21 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import *
 from sklearn.cluster import MiniBatchKMeans
 import glob
+from sklearn.metrics import classification_report
+from sklearn.metrics import precision_score, recall_score, accuracy_score
 
 
 all_instance_filenames = []
 all_instance_targets = []
-for f in glob.glob('cats-and-dogs-img/*.jpg'):
+for f in glob.glob("D:/download/train/*.jpg"):
     target = 1 if 'cat' in f else 0
     all_instance_filenames.append(f)
     all_instance_targets.append(target)
-
 surf_features = []
 counter = 0
+
 for f in all_instance_filenames:
-    print 'Reading image:', f
+    print('Reading image:', f)
     image = mh.imread(f, as_grey=True)
     surf_features.append(surf.surf(image)[:, 5:])
 
@@ -188,7 +194,7 @@ for instance in surf_features[train_len:]:
     X_test.append(features)
 
 clf = LogisticRegression(C=0.001, penalty='l2')
-clf.fit_transform(X_train, y_train)
+clf.fit(X_train, y_train)
 predictions = clf.predict(X_test)
 print(classification_report(y_test, predictions))
 print('Precision: ', precision_score(y_test, predictions))
