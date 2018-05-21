@@ -342,11 +342,9 @@ f = 'level3-plays-fetch.dot'
 export_graphviz(clf, out_file=f, feature_names=labels)
 
 
-################# Data #################
 
 
-
-################# Sample 1: Ad classification with Decision Trees #################
+### Sample 1: Ad classification with Decision Trees #################
 
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
@@ -420,7 +418,7 @@ if __name__ == '__main__':
         'clf__min_samples_leaf': (1, 2, 3)
     }
 
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, scoring='f1')
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=7, verbose=1, scoring='f1')
     grid_search.fit(X_train, y_train)
     print('Best score: %0.3f' % grid_search.best_score_)
     print('Best parameters set:')
