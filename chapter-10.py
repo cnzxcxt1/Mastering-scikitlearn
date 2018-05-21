@@ -30,6 +30,7 @@ if __name__ == '__main__':
     y = digits.target
     pipeline = Pipeline([
         ('ss', StandardScaler()),
-        ('mlp', MLPClassifier(hidden_layer_sizes = [150, 100], alpha=0.1))
+        ('mlp', MLPClassifier(hidden_layer_sizes=[150, 100], alpha=0.1))
     ])
     print(cross_val_score(pipeline, X, y, n_jobs=-1))
+
