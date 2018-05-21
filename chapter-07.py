@@ -11,7 +11,8 @@ print(np.cov(np.array(X).T))
 
 import numpy as np
 w, v = np.linalg.eig(np.array([[1, -2], [2, -3]]))
-w; v
+w
+v
 
 
 # Dimensionality reduction with Principal Component Analysis
@@ -47,39 +48,6 @@ plt.scatter(green_x, green_y, c='g', marker='.')
 plt.show()
 
 
-
-# Using PCA to visualize high-dimensional data
-
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from sklearn.datasets import load_iris
-
-
-data = load_iris()
-y = data.target
-X = data.data
-pca = PCA(n_components=2)
-reduced_X = pca.fit_transform(X)
-
-red_x, red_y = [], []
-blue_x, blue_y = [], []
-green_x, green_y = [], []
-for i in range(len(reduced_X)):
-    if y[i] == 0:
-        red_x.append(reduced_X[i][0])
-        red_y.append(reduced_X[i][1])
-    elif y[i] == 1:
-        blue_x.append(reduced_X[i][0])
-        blue_y.append(reduced_X[i][1])
-    else:
-        green_x.append(reduced_X[i][0])
-        green_y.append(reduced_X[i][1])
-plt.scatter(red_x, red_y, c='r', marker='x')
-plt.scatter(blue_x, blue_y, c='b', marker='D')
-plt.scatter(green_x, green_y, c='g', marker='.')
-plt.show()
-
-
 ################# Sample 1 #################
 
 import numpy as np
@@ -87,20 +55,8 @@ print np.linalg.eig(np.array([[3, 2], [1, 2]]))[0]
 
 W, V = np.linalg.eig(np.array([[3, 2], [1, 2]]))
 
-
-################# Sample 2 #################
-
-import numpy as np
-print np.linalg.eig(np.array([[3, 2], [1, 2]]))[1]
-
-
 ################# Figure 1#################
-"""
-
-"""
-import matplotlib
-matplotlib.use('Qt4Agg')
-import matplotlib.pyplot as plt
+import matplotlib .pyplot as plt
 import numpy as np
 
 A = np.array([[2, 1], [1, 2]])
@@ -109,7 +65,7 @@ plt.plot(A[0], A[1])
 plt.show()
 
 
-################# Sample: Face Recognition #################
+################# Sample: Face recognition with PCA #################
 
 from os import walk, path
 import numpy as np
