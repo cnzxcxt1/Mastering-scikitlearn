@@ -25,12 +25,11 @@ classifier = LogisticRegression()
 classifier.fit(X_train, y_train)
 predictions = classifier.predict(X_test)
 
-for i in [1,2,3,4,5] :
+for i in [1, 2, 3, 4, 5]:
     print('Prediction: %s' % (predictions[i]))
 
 
 ### Binary classification performance metrics
-################# Sample 3 #################
 
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
@@ -69,12 +68,30 @@ X_train = vectorizer.fit_transform(X_train_raw)
 X_test = vectorizer.transform(X_test_raw)
 classifier = LogisticRegression()
 classifier.fit(X_train, y_train)
+scores = cross_val_score(classifier, X_train, y_train, cv=5)
+print(np.mean(scores), scores)
+
+### Precision and recall
+
+import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model.logistic import LogisticRegression
+from sklearn.cross_validation import train_test_split, cross_val_score
+
+df = pd.read_csv('sms.csv')
+X_train_raw, X_test_raw, y_train, y_test = train_test_split(df['message'], df['label'])
+vectorizer = TfidfVectorizer()
+X_train = vectorizer.fit_transform(X_train_raw)
+X_test = vectorizer.transform(X_test_raw)
+classifier = LogisticRegression()
+classifier.fit(X_train, y_train)
 precisions = cross_val_score(classifier, X_train, y_train, cv=5, scoring='precision')
 print('Precision', np.mean(precisions), precisions)
 recalls = cross_val_score(classifier, X_train, y_train, cv=5, scoring='recall')
 print('Recall', np.mean(recalls), recalls)
 
-################# F1 Score #################
+################# Calculating the F1 measure #################
 
 f1s = cross_val_score(classifier, X_train, y_train, cv=5, scoring='f1')
 print('F1', np.mean(f1s), f1s)
@@ -109,6 +126,8 @@ plt.ylabel('Recall')
 plt.xlabel('Fall-out')
 plt.show()
 
+plt.close()
+
 ################# Tuning models with grid search #################
 
 import pandas as pd
@@ -135,46 +154,8 @@ parameters = {
 }
 
 if __name__ == "__main__":
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, scoring='accuracy', cv=3)
-    df = pd.read_csv('sms.csv')
-    X, y, = df['message'], df['label']
-    X_train, X_test, y_train, y_test = train_test_split(X, y)
-    grid_search.fit(X_train, y_train)
-    print('Best score: %0.3f' % grid_search.best_score_)
-    print('Best parameters set:')
-    best_parameters = grid_search.best_estimator_.get_params()
-    for param_name in sorted(parameters.keys()):
-        print('\t%s: %r' % (param_name, best_parameters[param_name]))
-    predictions = grid_search.predict(X_test)
-    print('Accuracy:', accuracy_score(y_test, predictions))
-    print('Precision:', precision_score(y_test, predictions))
-    print('Recall:', recall_score(y_test, predictions))
-
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model.logistic import LogisticRegression
-from sklearn.grid_search import GridSearchCV
-from sklearn.pipeline import Pipeline
-from sklearn.cross_validation import train_test_split
-from sklearn.metrics import precision_score, recall_score, accuracy_score
-
-pipeline = Pipeline([
-    ('vect', TfidfVectorizer(stop_words='english')),
-    ('clf', LogisticRegression())
-])
-parameters = {
-    'vect__max_df': (0.25, 0.5, 0.75),
-    'vect__stop_words': ('english', None),
-    'vect__max_features': (2500, 5000, 10000, None),
-    'vect__ngram_range': ((1, 1), (1, 2)),
-    'vect__use_idf': (True, False),
-    'vect__norm': ('l1', 'l2'),
-    'clf__penalty': ('l1', 'l2'),
-    'clf__C': (0.01, 0.1, 1, 10),
-}
-
-if __name__ == "__main__":
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, scoring='accuracy', cv=3)
+    ### when all threads are used, n_jobs=-1, if not ,choose as you want
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=7, verbose=1, scoring='accuracy', cv=3)
     df = pd.read_csv('sms.csv')
     X, y, = df['message'], df['label']
     X_train, X_test, y_train, y_test = train_test_split(X, y)
@@ -190,20 +171,20 @@ if __name__ == "__main__":
     print('Recall:', recall_score(y_test, predictions))
 
 
-################# Sample 9 #################
+################# Multi-class classification #################
 
 import pandas as pd
 df = pd.read_csv('train.tsv', header=0, delimiter='\t')
 print(df.count())
 print(df.head(10))
+
 print(df['Phrase'].head())
 print(df['Sentiment'].describe())
 print(df['Sentiment'].value_counts())
 print(df['Sentiment'].value_counts()/df['Sentiment'].count())
 
 
-################# Sample: Multi-Class Classification of Movie Review Sentiments #################
-
+### Sample: Multi-Class Classification of Movie Review Sentiments
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model.logistic import LogisticRegression
@@ -212,7 +193,10 @@ from sklearn.metrics import classification_report, accuracy_score, confusion_mat
 from sklearn.pipeline import Pipeline
 from sklearn.grid_search import GridSearchCV
 
-def main():
+#def main():
+
+
+if __name__ == '__main__':
     pipeline = Pipeline([
         ('vect', TfidfVectorizer(stop_words='english')),
         ('clf', LogisticRegression())
@@ -226,34 +210,26 @@ def main():
     df = pd.read_csv('train.tsv', header=0, delimiter='\t')
     X, y = df['Phrase'], df['Sentiment'].as_matrix()
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.5)
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=3, verbose=1, scoring='accuracy')
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=7, verbose=1, scoring='accuracy')
     grid_search.fit(X_train, y_train)
     print('Best score: %0.3f' % grid_search.best_score_)
     print('Best parameters set:')
     best_parameters = grid_search.best_estimator_.get_params()
     for param_name in sorted(parameters.keys()):
         print('\t%s: %r' % (param_name, best_parameters[param_name]))
+    #main()
 
-if __name__ == '__main__':
-    main()
-
-
-################# Sample 11 #################
-# Multi-Class Classification Performance Metrics
-
-predictions = grid_search.predict(X_test)
-print('Accuracy:', accuracy_score(y_test, predictions))
-print('Confusion Matrix:', confusion_matrix(y_test, predictions))
-print('Classification Report:', classification_report(y_test, predictions))
+    # Multi-Class Classification Performance Metrics
 
 
-################# Sample 12 #################
-# Applying Multi-label Classification
+    predictions = grid_search.predict(X_test)
+    print('Accuracy:', accuracy_score(y_test, predictions))
+    print('Confusion Matrix:', confusion_matrix(y_test, predictions))
+    print('Classification Report:', classification_report(y_test, predictions))
 
 
 
-################# Sample 13 #################
-# Multi-Label Classification Performance Metrics
+# P95 Multi-Label Classification Performance Metrics
 
 import numpy as np
 from sklearn.metrics import hamming_loss, jaccard_similarity_score
